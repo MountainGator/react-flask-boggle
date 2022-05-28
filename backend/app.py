@@ -22,10 +22,14 @@ def check_guess():
     collect front end post request and check if it's valid. Return results
     """
     print('request body:',request.json)
-    guess = request.json
+    guess = request.json.guess
     board = session['board']
     res = game.check_valid_word(board, guess)
-    return Response(res, status=200)
+    if res == 'Ok':
+        return Response('OK', status=200)
+    else: return Response('Wrong answer', status=204)
+
+
 
 
 
