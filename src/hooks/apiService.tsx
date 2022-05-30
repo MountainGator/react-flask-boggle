@@ -17,7 +17,7 @@ export class ApiService {
 
     async guessWord (guess: string) {
         try { 
-            const res: any = await axios.post('http://localhost:5000/guess', JSON.stringify({guess: guess}));
+            const res: any = await axios.post('/guess', {guess: guess});
             console.log('post response:',res);
             return res.data;
         } catch (e) {

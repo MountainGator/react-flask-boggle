@@ -15,31 +15,34 @@ const Boggle = () => {
     const [isValid, setValid] = useState(true)
     let navigate = useNavigate();
 
+    const getBoard: Function = async () => {
+        const res: any = await api.getTiles();
+        console.log('res from useEffect:', res)
+        triesRef.current += 1;
+        setBoard(res);
+        console.log('board:', board)
+    }
+
+    const timer: Function = () => {
+        setTimeout(() => navigate(`../gameover/${scoreRef.current}/${triesRef.current}`, { replace: true }), 60000)
+    }
+
     useEffect(() => {
-        const getBoard: Function = async () => {
-            const res: any = await api.getTiles();
-            console.log('res from useEffect:', res)
-            triesRef.current += 1;
-            setBoard(board => res);
-            console.log('board:', board)
-        }
-
-        const timer: Function = () => {
-            setTimeout(() => navigate(`../gameover/${scoreRef.current}/${triesRef.current}`, { replace: true }), 60000)
-        }
-
         getBoard();
         timer();
-    }, [])
+    }, []);
 
     const handleSubmit = () => {
         let word = formData.guess;
-        
+        console.log('word:', word);
         const res: any = api.guessWord(word);
-        if (res === 'ok') {
+        console.log(res)
+        if (res === 'OK') {
             setValid(true)
             scoreRef.current += word.length;
         } else setValid(false);
+
+        setData({guess: ''})
     }
 
     return (
@@ -47,17 +50,22 @@ const Boggle = () => {
             <Form formData={formData} setData={setData} handleSubmit={handleSubmit} className="row" />
 
             <div className='row mt-4'>
-                <table className='col-4 mx-lg-auto'>
-                {board && board.map(
-                    (row: Array<string>) => 
-                        <tr>{row.map((cell: string) => 
-                            <td>{<Tile letter={cell} key={uuid()} />}</td>)}
-                        </tr>)}
+                <table className='col-3 mx-lg-auto'>
+                    <tbody>
+                        {board && board.map(
+                        (row: Array<string>) => 
+                            <tr>{row.map((cell: string) => 
+                                <td>{<Tile letter={cell} key={uuid()} />}</td>)}
+                            </tr>
+                            )
+                        }
+                    </tbody>
                 </table>
             </div>
 
             <div className='row mt-4 text-center'>
                 <h2>Score: {scoreRef.current}</h2>
+                {!isValid && <p className='text-danger'>Word not found in dictionary</p>}
             </div>
             
         </section>
