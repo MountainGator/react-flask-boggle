@@ -25,4 +25,27 @@ export class ApiService {
             return
         }   
     }
+
+
+    async setNumTries () {
+        try {
+            const res: any = await axios.post('/set_tries', {});
+            console.log('set tries response:', res.data)
+            return res.data
+        } catch (e) {
+            console.error(e)
+            return
+        }
+    }
+
+    async getNumTries () {
+        try {
+            const res: any = await axios.get('/get_tries');
+            console.log('get tries response:',res.data)
+            return res.data
+        } catch (e) {
+            console.error(e)
+            return
+        }
+    }
 }

@@ -18,7 +18,7 @@ const Boggle = () => {
     const getBoard: Function = async () => {
         const res: any = await api.getTiles();
         console.log('res from useEffect:', res)
-        triesRef.current += 1;
+        const setTries: any = api.setNumTries();
         setBoard(res);
         console.log('board:', board)
     }
@@ -36,7 +36,8 @@ const Boggle = () => {
         let word = formData.guess;
         console.log('word:', word);
         const res: any = api.guessWord(word);
-        console.log(res)
+        const triesRes: any = api.getNumTries();
+        console.log('number of tries', triesRes)
         if (res === 'OK') {
             setValid(true)
             scoreRef.current += word.length;
